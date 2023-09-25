@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="text" name="first_name" placeholder="first name" required>
+    <input type="text" name="last_name" placeholder="last name" required>
+    <input type="url" name="image_url" placeholder="img url">
+    <button type="submit">SAVE</button>
+</form>
+<form action="/users/{{id}}/delete" method="POST">
+    <button type="submit">DELETE USER</button>
+</form>
+<form action="/users/{{id}}">
+    <button type="submit">CANCEL</button>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}user info{% endblock %}
+
+{% block content %}
+<ul>
+    <li>id: {{user.id}}</li>
+    <li>first name: {{user.first_name}}</li>
+    <li>last name: {{user.last_name}}</li>
+</ul>
+<form action="/users/{{user.id}}/edit">
+    <button type="submit">EDIT USER</button>
+</form>
+{% endblock %}
