@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, redirect, render_template, request
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
@@ -14,6 +14,8 @@ debug = DebugToolbarExtension(app)
 
 connect_db(app)
 # db.create_all()
+
+# USER ROUTES
 
 @app.route("/")
 def main():
@@ -70,6 +72,61 @@ def delete_user_db(id):
     db.session.commit()
 
     return redirect(f"/users")
+
+# POST ROUTES
+
+@app.route("/users/<id>/posts/new")
+def new_post_form(id):
+    return render_template('new_post.html', id=id)
+
+@app.route("/users/<id>/posts/new", methods=['POST'])
+def new_post(id):
+    title = request.form['title']
+    content = request.form['content']
+
+    post = Post(title = title, content = content, user_id = id)
+    
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(f"/posts/{post.id}")
+
+@app.route("/posts/<id>")
+def show_post(id):
+    post = Post.query.get(id)
+    user = User.query.get(post.user_id)
+
+    return render_template('post.html', post = post, user = user)
+
+@app.route("/posts/<id>/edit")
+def edit_post_form(id):
+    return render_template('edit_post.html', id = id)
+
+@app.route("/posts/<id>/edit", methods=['POST'])
+def edit_post(id):
+    title = request.form['title']
+    content = request.form['content']
+
+    post = Post.query.get(id)
+
+    post.title = title
+    post.content = content 
+
+    db.session.add(post)
+    db.session.commit()
+    
+    return redirect(f"/posts/{id}")
+
+@app.route("/posts/<id>/delete", methods=['POST'])
+def delete_post(id):
+    Post.query.filter_by(id = id).delete()
+    db.session.commit()
+
+    return redirect(f"/users")
+
+
+
+
 
 
 
