@@ -9,6 +9,10 @@
     <input type="text" name="title" placeholder="title" required>
     <label for="content">Content</label>
     <input type="text" name="content" placeholder="content" required>
+    {% for tag in tags%}
+    <label for="{{tag.name}}">{{tag.name}}:</label>
+    <input type="checkbox" name="checkbox" value="{{tag.name}}">
+    {% endfor %}
     <button type="submit">Edit</button>
 </form>
 {% endblock %}
